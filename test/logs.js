@@ -62,14 +62,16 @@ test("test1", 13, function() {
 		result: true,
 		message: undefined,
 		actual: 0,
-		expected: 0
+		expected: 0,
+        assertion: "equal"
 	});
 	equal("foo", "foo", "msg");
 	deepEqual(logContext, {
 		result: true,
 		message: "msg",
 		actual: "foo",
-		expected: "foo"
+		expected: "foo",
+        assertion: "equal"
 	});
 	strictEqual(testDoneContext, undefined);
 	deepEqual(testContext, {
@@ -79,6 +81,65 @@ test("test1", 13, function() {
 	strictEqual(moduleDoneContext, undefined);
 	deepEqual(moduleContext, {
 		name: "logs1"
+	});
+
+	ok(true, "message");
+	deepEqual(logContext, {
+		result: true,
+		message: "message",
+		module: "logs1",
+		name: "test1",
+		assertion: "ok"
+	});
+
+	deepEqual({a: 1}, {a: 2}, "msg");
+	deepEqual(logContext, {
+		result: false,
+		message: "message",
+		module: "logs1",
+		name: "test1",
+		assertion: "deepEqual"
+	});
+
+	notDeepEqual({a: 1}, {b: 2}, "msg);
+	deepEqual(logContext, {
+		result: true,
+		message: "message",
+		module: "logs1",
+		name: "test1",
+		assertion: "notDeepEqual"
+	});
+
+	notEqual(1, 2, "msg");
+	deepEqual(logContext, {
+		result: true,
+		message: "message",
+		module: "logs1",
+		name: "test1",
+		assertion: "notEqual"
+	});
+
+	strictEqual(1, 2, "msg);
+	deepEqual(logContext, {
+		result: false,
+		message: "message",
+		module: "logs1",
+		name: "test1",
+		assertion: "strictEqual"
+	});
+
+	notStrictEqual(1, 2, "msg);
+	deepEqual(logContext, {
+		result: true,
+		message: "message",
+		module: "logs1",
+		name: "test1",
+		assertion: "notStrictEqual"
+	});
+
+	expect(1);
+	deepEqual(logContext, {
+		assertion: "expect";
 	});
 
 	equal(log, 12);
