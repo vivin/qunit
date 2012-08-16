@@ -51,7 +51,7 @@ for (var i = 0; i < logs.length; i++) {
 
 module("logs1");
 
-test("test1", 13, function() {
+test("test1", 15, function() {
 	equal(begin, 1);
 	equal(moduleStart, 1);
 	equal(testStart, 1);
@@ -62,14 +62,16 @@ test("test1", 13, function() {
 		result: true,
 		message: undefined,
 		actual: 0,
-		expected: 0
+		expected: 0,
+        assertion: QUnit.AssertionType.EQUAL
 	});
 	equal("foo", "foo", "msg");
 	deepEqual(logContext, {
 		result: true,
 		message: "msg",
 		actual: "foo",
-		expected: "foo"
+		expected: "foo",
+        assertion: QUnit.AssertionType.EQUAL
 	});
 	strictEqual(testDoneContext, undefined);
 	deepEqual(testContext, {
@@ -81,7 +83,14 @@ test("test1", 13, function() {
 		name: "logs1"
 	});
 
-	equal(log, 12);
+	ok(true, "message");
+	deepEqual(logContext, {
+		result: true,
+		message: "message",
+		assertion: QUnit.AssertionType.OK
+	});
+
+	equal(log, 14);
 });
 test("test2", 10, function() {
 	equal(begin, 1);
@@ -94,8 +103,8 @@ test("test2", 10, function() {
 		module: "logs1",
 		name: "test1",
 		failed: 0,
-		passed: 13,
-		total: 13
+		passed: 15,
+		total: 15
 	});
 	deepEqual(testContext, {
 		module: "logs1",
@@ -106,7 +115,7 @@ test("test2", 10, function() {
 		name: "logs1"
 	});
 
-	equal(log, 22);
+	equal(log, 24);
 });
 
 module("logs2");
@@ -125,14 +134,14 @@ test("test1", 9, function() {
 	deepEqual(moduleDoneContext, {
 		name: "logs1",
 		failed: 0,
-		passed: 23,
-		total: 23
+		passed: 25,
+		total: 25
 	});
 	deepEqual(moduleContext, {
 		name: "logs2"
 	});
 
-	equal(log, 31);
+	equal(log, 33);
 });
 test("test2", 8, function() {
 	equal(begin, 1);
@@ -149,7 +158,7 @@ test("test2", 8, function() {
 		name: "logs2"
 	});
 
-	equal(log, 39);
+	equal(log, 41);
 });
 
 var testAutorun = true;
