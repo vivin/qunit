@@ -164,9 +164,9 @@ Test.prototype = {
 		if ( config.requireExpects && this.expected == null ) {
 			QUnit.pushFailure( "Expected number of assertions to be defined, but expect() was not called.", this.stack );
 		} else if ( this.expected != null && this.expected != this.assertions.length ) {
-			QUnit.pushFailure( "Expected " + this.expected + " assertions, but " + this.assertions.length + " were run", this.stack );
+			QUnit.pushFailure( "Expected " + this.expected + " assertions, but " + this.assertions.length + " were run", this.stack, null, "expect" );
 		} else if ( this.expected == null && !this.assertions.length ) {
-			QUnit.pushFailure( "Expected at least one assertion, but none were run - call expect(0) to accept zero assertions.", this.stack );
+			QUnit.pushFailure( "Expected at least one assertion, but none were run - call expect(0) to accept zero assertions.", this.stack, null, "expect" );
 		}
 
 		var assertion, a, b, i, li, ol,
@@ -418,6 +418,7 @@ QUnit.assert = {
 
 		var source,
 			details = {
+                assertion: "ok",
 				result: result,
 				message: msg
 			};
@@ -447,7 +448,7 @@ QUnit.assert = {
 	 * @example equal( format( "Received {0} bytes.", 2), "Received 2 bytes.", "format() replaces {0} with next argument" );
 	 */
 	equal: function( actual, expected, message ) {
-		QUnit.push( expected == actual, actual, expected, message );
+		QUnit.push( expected == actual, actual, expected, message, "equal" );
 	},
 
 	/**
@@ -455,7 +456,7 @@ QUnit.assert = {
 	 * @function
 	 */
 	notEqual: function( actual, expected, message ) {
-		QUnit.push( expected != actual, actual, expected, message );
+		QUnit.push( expected != actual, actual, expected, message, "notEqual" );
 	},
 
 	/**
@@ -463,7 +464,7 @@ QUnit.assert = {
 	 * @function
 	 */
 	deepEqual: function( actual, expected, message ) {
-		QUnit.push( QUnit.equiv(actual, expected), actual, expected, message );
+		QUnit.push( QUnit.equiv(actual, expected), actual, expected, message, "deepEqual" );
 	},
 
 	/**
@@ -471,7 +472,7 @@ QUnit.assert = {
 	 * @function
 	 */
 	notDeepEqual: function( actual, expected, message ) {
-		QUnit.push( !QUnit.equiv(actual, expected), actual, expected, message );
+		QUnit.push( !QUnit.equiv(actual, expected), actual, expected, message, "notDeepEqual" );
 	},
 
 	/**
@@ -479,7 +480,7 @@ QUnit.assert = {
 	 * @function
 	 */
 	strictEqual: function( actual, expected, message ) {
-		QUnit.push( expected === actual, actual, expected, message );
+		QUnit.push( expected === actual, actual, expected, message, "strictEqual" );
 	},
 
 	/**
@@ -487,7 +488,7 @@ QUnit.assert = {
 	 * @function
 	 */
 	notStrictEqual: function( actual, expected, message ) {
-		QUnit.push( expected !== actual, actual, expected, message );
+		QUnit.push( expected !== actual, actual, expected, message, "notStrictEqual" );
 	},
 
 	throws: function( block, expected, message ) {
@@ -523,9 +524,9 @@ QUnit.assert = {
 				ok = true;
 			}
 
-			QUnit.push( ok, actual, null, message );
+			QUnit.push( ok, actual, null, message, "throws" );
 		} else {
-			QUnit.pushFailure( message, null, 'No exception was thrown.' );
+			QUnit.pushFailure( message, null, 'No exception was thrown.', "throws" );
 		}
 	}
 };
@@ -773,13 +774,14 @@ extend( QUnit, {
 		return undefined;
 	},
 
-	push: function( result, actual, expected, message ) {
+	push: function( result, actual, expected, message, assertion ) {
 		if ( !config.current ) {
 			throw new Error( "assertion outside test context, was " + sourceFromStacktrace() );
 		}
 
 		var output, source,
 			details = {
+                assertion: assertion,
 				result: result,
 				message: message,
 				actual: actual,
@@ -818,13 +820,14 @@ extend( QUnit, {
 		});
 	},
 
-	pushFailure: function( message, source, actual ) {
+	pushFailure: function( message, source, actual, assertion ) {
 		if ( !config.current ) {
 			throw new Error( "pushFailure() assertion outside test context, was " + sourceFromStacktrace(2) );
 		}
 
 		var output,
 			details = {
+                assertion: assertion,
 				result: false,
 				message: message
 			};
