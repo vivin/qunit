@@ -162,7 +162,7 @@ Test.prototype = {
 	finish: function() {
 		config.current = this;
 		if ( config.requireExpects && this.expected == null ) {
-			QUnit.pushFailure( "Expected number of assertions to be defined, but expect() was not called.", this.stack );
+			QUnit.pushFailure( "Expected number of assertions to be defined, but expect() was not called.", this.stack, "expect" );
 		} else if ( this.expected != null && this.expected != this.assertions.length ) {
 			QUnit.pushFailure( "Expected " + this.expected + " assertions, but " + this.assertions.length + " were run", this.stack, null, "expect" );
 		} else if ( this.expected == null && !this.assertions.length ) {
